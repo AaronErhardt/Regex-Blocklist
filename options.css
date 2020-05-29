@@ -17,6 +17,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>. */
 :root {
   --accent-color: #45a1ff;
   --red: #EE4949;
+  --green: #23C765;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -46,6 +47,17 @@ body {
   color: var(--placeholder-color);
 }
 
+h1 {
+  font-size: 1.8em;
+  line-height: 120%;
+  margin: 0;
+}
+
+p {
+  font-size: 1.1em;
+}
+
+
 input {
   padding: 0.4em;
 
@@ -67,8 +79,26 @@ input.no-match {
 }
 
 input.match {
-  border-color: #23C765;
+  border-color: var(--green);
 }
+
+.flex-horizontal {
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: space-between;
+  padding-bottom: 0.4em;
+}
+
+.regex {
+  flex-grow: 10;
+
+  margin-right: 0.4em;
+}
+
+.regexFlags {
+  flex-grow: 1;
+}
+
 
 button {
   padding: 0.4em;
@@ -95,31 +125,4 @@ button.inactive {
 button.inactive:active {
   background-color: var(--red);
   border-color: var(--red);
-}
-
-h1 {
-  font-size: 1.8em;
-  line-height: 120%;
-  margin: 0;
-}
-
-p {
-  font-size: 1.1em;
-}
-
-.flex-horizontal {
-  display: flex;
-  flex-flow: row nowrap;
-  justify-content: space-between;
-  padding-bottom: 0.4em;
-}
-
-.regex {
-  flex-grow: 10;
-
-  margin-right: 0.4em;
-}
-
-.regexFlags {
-  flex-grow: 1;
 }

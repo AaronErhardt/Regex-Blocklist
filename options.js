@@ -1,4 +1,5 @@
-﻿﻿/* RegEx Blacklist
+﻿﻿
+/* RegEx Blacklist
 Copyright (C) 2020 Aaron Erhardt
 
 This program is free software: you can redistribute it and/or modify
@@ -21,21 +22,86 @@ const black_list = document.querySelector("#blacklist");
 const add_regex_button = document.querySelector("#add-regex");
 const regex_test = document.querySelector("#regex-test");
 
+// load settings on page load
+loadListEntries();
+
 add_regex_button.addEventListener("click", createEmptyListEntry);
 regex_test.addEventListener("input", testRegexList);
 
-function createEmptyListEntry() {
-  if (!listContainsEmptyEntry()) {
-    addListEntry();
-    add_regex_button.classList.add("inactive");
+// UPDATE functions
+
+// update data of background.js
+function reloadExtensionData() {
+  browser.runtime.getBackgroundPage().then(page => {
+    page.loadBlacklist();
+  }, err => console.error(err));
+}
+
+function storeListEntries() {
+  const storage = [];
+
+  for (const child of blacklist.children) {
+    // check whether first input (the RegEx) is empty
+    if (child.firstChild.value !== "") {
+      storage.push({
+        regex: child.firstChild.value,
+        flags: child.lastChild.value,
+      });
+    }
+  }
+
+  browser.storage.local.set({
+    regex_blacklist: storage
+  });
+}
+
+function testRegexList() {
+  if (regex_test.value === "") {
+    // remove colors -> no test url
+    blacklist.querySelectorAll(".match").forEach(elem => elem.classList.remove("match"))
+    blacklist.querySelectorAll(".no-match").forEach(elem => elem.classList.remove("no-match"));
+  } else {
+    // match every entry of the blacklist against a RegEx
+    for (const node of blacklist.children) {
+      const regex = new RegExp(node.firstChild.value, node.lastChild.value);
+      if (regex.test(regex_test.value)) {
+        node.firstChild.classList.add("match");
+        node.lastChild.classList.add("match");
+        node.firstChild.classList.remove("no-match");
+        node.lastChild.classList.remove("no-match");
+      } else {
+        node.firstChild.classList.remove("match");
+        node.lastChild.classList.remove("match");
+        node.firstChild.classList.add("no-match");
+        node.lastChild.classList.add("no-match");
+      }
+    }
   }
 }
 
-function reloadExtensionData(){
-  browser.runtime.getBackgroundPage().then(page => {
-    page.loadBlacklist();            
-  }, err => console.error(err));
+function updateList() {
+  // remove every empty entry except the last one
+  for (const node of blacklist.children) {
+    if (node.firstChild.value === "" && node.lastChild.value === "" && node !== blacklist.lastChild) {
+      blacklist.removeChild(node);
+    }
+  }
+
+  // only the last entry can be empty
+  // if the last entry is empty we don't need new empty entries so mark the button as inactive
+  if (blacklist.firstChild.value === "" && blacklist.lastChild.value === "") {
+    add_regex_button.classList.add("inactive");
+  } else {
+    add_regex_button.classList.remove("inactive");
+  }
+
+  storeListEntries();
+  testRegexList();
+  reloadExtensionData();
 }
+
+
+// DOM manipulation functions
 
 function addListEntry(regex, flags) {
 
@@ -79,23 +145,11 @@ function listContainsEmptyEntry() {
   return false;
 }
 
-function storeListEntries() {
-  console.log("Storing entries");
-
-  const storage = [];
-
-  for (let child of blacklist.children) {
-    if (child.firstChild && child.firstChild.value !== "") {
-      storage.push({
-        regex: child.firstChild.value,
-        flags: child.lastChild.value,
-      });
-    }
+function createEmptyListEntry() {
+  if (!listContainsEmptyEntry()) {
+    addListEntry();
+    add_regex_button.classList.add("inactive");
   }
-
-  browser.storage.local.set({
-    regex_blacklist: storage
-  });
 }
 
 function clearList() {
@@ -104,9 +158,10 @@ function clearList() {
   }
 }
 
-function loadListEntries() {
-  console.log("Loading entries");
 
+// Loading the settings
+
+function loadListEntries() {
   clearList();
 
   browser.storage.local.get("regex_blacklist")
@@ -118,55 +173,3 @@ function loadListEntries() {
       }
     }, err => console.error(err));
 }
-
-function updateList() {
-  for (const node of blacklist.children) {
-    if (node.firstChild.value === "") {
-      if (node !== blacklist.lastChild) {
-        blacklist.removeChild(node);
-      }
-    }
-  }
-
-  storeListEntries();
-  testRegexList();
-  reloadExtensionData();
-
-  if (listContainsEmptyEntry()) {
-    add_regex_button.classList.add("inactive");
-  } else {
-    add_regex_button.classList.remove("inactive");
-  }
-}
-
-function testRegexList() {
-  if (regex_test.value === "") {
-    const matches = blacklist.querySelectorAll(".match");
-    const no_matches = blacklist.querySelectorAll(".no-match");
-
-    for (const match of matches) {
-      match.classList.remove("match");
-    }
-    for (const no_match of no_matches) {
-      no_match.classList.remove("no-match");
-    }
-
-  } else {
-    for (const node of blacklist.children) {
-      const regex = new RegExp(node.firstChild.value, node.lastChild.value);
-      if (regex.test(regex_test.value)) {
-        node.firstChild.classList.add("match");
-        node.lastChild.classList.add("match");
-        node.firstChild.classList.remove("no-match");
-        node.lastChild.classList.remove("no-match");
-      } else {
-        node.firstChild.classList.remove("match");
-        node.lastChild.classList.remove("match");
-        node.firstChild.classList.add("no-match");
-        node.lastChild.classList.add("no-match");
-      }
-    }
-  }
-}
-
-loadListEntries();

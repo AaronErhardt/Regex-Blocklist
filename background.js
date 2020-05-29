@@ -24,6 +24,7 @@ function loadBlacklist() {
       regex_blacklist = [];
       const blacklist = result.regex_blacklist || [];
 
+      // Push new RegEx entries into the regex_blacklist
       for (const entry of blacklist) {
         regex_blacklist.push(new RegExp(entry.regex, entry.flags));
       }
@@ -34,6 +35,7 @@ function loadBlacklist() {
 }
 
 function checkRequest(requestDetails) {
+  // Testing the url against every blacklist entry
   for (const regex of regex_blacklist) {
     if (regex.test(requestDetails.url)) {
       console.log(`regex blocker: Canceling '${requestDetails.url}'`);
@@ -42,6 +44,7 @@ function checkRequest(requestDetails) {
       };
     }
   }
+
   return {
     cancel: false
   }
