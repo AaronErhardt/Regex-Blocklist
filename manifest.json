@@ -11,6 +11,11 @@
     }
   },
 
+  "icons": {
+    "48": "icon.svg",
+    "96": "icon.svg"
+  },
+
   "permissions": [
     "webRequest",
     "<all_urls>",
