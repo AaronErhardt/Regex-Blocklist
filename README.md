@@ -1,6 +1,6 @@
 # Regex Blacklist
 
-Regex Blacklist allows you to easily block urls using RegEx. 
+Regex Blacklist allows you to easily block urls using RegEx. This blacklist can not only stop pages from loading, but also images, scripts, style sheets, fonts and more.
 
 # Change Blacklist settings
 
