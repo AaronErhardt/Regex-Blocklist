@@ -30,7 +30,7 @@ function loadBlacklist() {
       }
 
     }, error => {
-      console.error(`regex blocker: ${error}`);
+      console.error(`RegEx blocker: ${error}`);
     });
 }
 
@@ -38,7 +38,7 @@ function checkRequest(requestDetails) {
   // Testing the url against every blacklist entry
   for (const regex of regex_blacklist) {
     if (regex.test(requestDetails.url)) {
-      console.log(`regex blocker: Canceling '${requestDetails.url}'`);
+      console.log(`RegEx blocker: Canceled '${requestDetails.url}'`);
       return {
         cancel: true
       };

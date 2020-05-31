@@ -117,7 +117,7 @@ function addListEntry(regex, flags) {
   input2.classList.add("regexFlags");
 
   input1.placeholder = "New Regular Expression";
-  input2.placeholder = "RegEx Flags";
+  input2.placeholder = "Flags";
 
   input1.size = "30";
   input2.size = "3";
