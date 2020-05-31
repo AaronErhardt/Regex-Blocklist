@@ -1,8 +1,8 @@
 ﻿{
-  "description": "Filter HTTP requests with regex",
+  "description": "Filter HTTP requests with Regular Expressions",
   "manifest_version": 2,
   "name": "RegEx Blacklist",
-  "version": "1.0",
+  "version": "1.1",
 
   "applications": {
     "gecko": {
