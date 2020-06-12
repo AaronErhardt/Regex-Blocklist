@@ -7,6 +7,7 @@ Regex Blacklist allows you to easily block urls using RegEx. This blacklist will
 * 100% open source
 * Support for RegEx flags (e.g. for case-insensitivity)
 * Easily test your blacklist against urls in the settings
+* High performance and low RAM usage
 * Automatic dark mode
 
 [![**Get the Add-on**](https://extensionworkshop.com/assets/7a17e6-5cc43798bf2472557d8b437e779316758d0e41483542e921f6781694623ee71c.png "Get the Add-on")](https://addons.mozilla.org/en-US/firefox/addon/regex-blacklist/)
