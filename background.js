@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>. */
 let regex_blacklist = [];
 
 function loadBlacklist() {
-  browser.storage.local.get("regex_blacklist")
+  browser.storage.sync.get("regex_blacklist")
     .then(result => {
       regex_blacklist = [];
       const blacklist = result.regex_blacklist || [];

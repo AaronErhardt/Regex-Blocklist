@@ -1,5 +1,4 @@
-﻿﻿
-/* RegEx Blacklist
+﻿﻿/* RegEx Blacklist
 Copyright (C) 2020 Aaron Erhardt
 
 This program is free software: you can redistribute it and/or modify
@@ -50,7 +49,7 @@ function storeListEntries() {
     }
   }
 
-  browser.storage.local.set({
+  browser.storage.sync.set({
     regex_blacklist: storage
   });
 }
@@ -164,7 +163,7 @@ function clearList() {
 function loadListEntries() {
   clearList();
 
-  browser.storage.local.get("regex_blacklist")
+  browser.storage.sync.get("regex_blacklist")
     .then(result => {
       const storage = result.regex_blacklist || [];
 
