@@ -1,4 +1,4 @@
-﻿<!-- RegEx Blacklist
+﻿<!-- RegEx Blocklist
 Copyright (C) 2020 Aaron Erhardt
 
 This program is free software: you can redistribute it and/or modify
@@ -23,14 +23,21 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>. -->
 </head>
 
 <body>
-  <h1>RegEx Blacklist</h1>
-  <p>All urls matching the following Regular Expressions will be blocked:</p>
+  <h1>RegEx Blocklist</h1>
+  <p class="narrow">All urls matching the Regular Expressions in the blocklist will be blocked unless the allowlist explicitly allows the url.</p>
+  <h3>Blocklist:</h3>
   <div>
     <div id="blacklist">
     </div>
-    <button id="add-regex">Add new RegEx</button>
+    <button id="add-blocker">Add new RegEx block rule</button>
   </div>
-  <p>Test the blacklist with an url:</p>
+  <h3>Allowlist:</h3>
+  <div>
+    <div id="allowlist">
+    </div>
+    <button id="add-allower">Add new RegEx allow rule</button>
+  </div>
+  <p>Test the lists with an url:</p>
   <form>
     <input id="regex-test" type="text" placeholder="Test Url" class="width-100">
   </form>

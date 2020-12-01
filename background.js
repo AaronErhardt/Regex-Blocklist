@@ -16,7 +16,11 @@ along with this program. If not, see <http://www.gnu.org/licenses/>. */
 
 'use strict';
 
+// I would like to fix the naming
+// but renaming breaks the code and also 
+// deletes configurations on update...
 let regex_blacklist = [];
+let regex_allowlist = [];
 
 function loadBlacklist() {
   browser.storage.sync.get("regex_blacklist")
@@ -24,9 +28,23 @@ function loadBlacklist() {
       regex_blacklist = [];
       const blacklist = result.regex_blacklist || [];
 
-      // Push new RegEx entries into the regex_blacklist
+      // Push new RegEx entries into the blacklist
       for (const entry of blacklist) {
         regex_blacklist.push(new RegExp(entry.regex, entry.flags));
+      }
+
+    }, error => {
+      console.error(`RegEx blocker: ${error}`);
+    });
+    
+  browser.storage.sync.get("regex_allowlist")
+    .then(result => {
+      regex_allowlist = [];
+      const allowlist = result.regex_allowlist || [];
+
+      // Push new RegEx entries into the allowlist
+      for (const entry of allowlist) {
+        regex_allowlist.push(new RegExp(entry.regex, entry.flags));
       }
 
     }, error => {
@@ -36,18 +54,28 @@ function loadBlacklist() {
 
 function checkRequest(requestDetails) {
   // Testing the url against every blacklist entry
-  for (const regex of regex_blacklist) {
-    if (regex.test(requestDetails.url)) {
-      console.log(`RegEx blocker: Canceled '${requestDetails.url}'`);
+  for (const block_regex of regex_blacklist) {
+    if (block_regex.test(requestDetails.url)) {
+
+      for (const allow_regex of regex_allowlist) {
+        if (allow_regex.test(requestDetails.url)) {
+          console.log(`RegEx blocker: Allowed '${requestDetails.url}'`);
+          return {
+            cancel: false
+          };
+        }
+      }
+
       return {
         cancel: true
       };
+      console.log(`RegEx blocker: Canceled '${requestDetails.url}'`);
     }
   }
 
   return {
     cancel: false
-  }
+  };
 }
 
 document.addEventListener("DOMContentLoaded", () => {
